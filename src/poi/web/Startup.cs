@@ -41,7 +41,19 @@ namespace poi
 
             var connectionString = poi.Utility.POIConfiguration.GetConnectionString(this.Configuration);
             services.AddDbContext<POIContext>(options =>
-                options.UseSqlServer(connectionString));
+            {
+                connectionString = connectionString.Replace("[SQL_SERVER]", Configuration["SQL_SERVER"]);
+                connectionString = connectionString.Replace("[SQL_DBNAME]", Configuration["SQL_DBNAME"]);
+                connectionString = connectionString.Replace("[SQL_USER]", Configuration["SQL_USER"]);
+                connectionString = connectionString.Replace("[PASSWORD]", Configuration["SA_PASSWORD"]);
+                connectionString = connectionString.Replace("[DB_HOST]", Configuration["DB_HOST"]);
+
+                Console.WriteLine("*****");
+                Console.WriteLine(connectionString);
+
+                options.UseSqlServer(connectionString);
+            });
+
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -49,6 +61,7 @@ namespace poi
                 c.SwaggerDoc("docs", new Info { Title = "Trip Insights Points Of Interest (POI) API", Description = "API for the trips in the Trip Insights app. https://github.com/Azure-Samples/openhack-containers", Version = "v1" });
             });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<Startup> logger)
@@ -61,7 +74,9 @@ namespace poi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
-            }else{
+            }
+            else
+            {
                 // https://github.com/prometheus-net/prometheus-net#aspnet-core-http-request-metrics
                 // "You should use either UseExceptionHandler() or a custom exception handler middleware. 
                 // prometheus-net cannot see what the web host's default exception handler does and may report 

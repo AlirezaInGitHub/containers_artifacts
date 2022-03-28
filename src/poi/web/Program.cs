@@ -5,8 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using poi.Data;
 using poi.Utility;
 namespace poi
 {
@@ -14,17 +17,20 @@ namespace poi
     {
         public static void Main(string[] args)
         {
-
-            BuildWebHost(args).Run();
-
+            var host = BuildWebHost(args);
+            var c = host.Services.GetService<POIContext>();
+            c.Database.Migrate();
+            host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) {
+        public static IWebHost BuildWebHost(string[] args)
+        {
 
             return CreateWebHostBuilder(args).Build();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
             //used to read env variables for host/port
             var configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
