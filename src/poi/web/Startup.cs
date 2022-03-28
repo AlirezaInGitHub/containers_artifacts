@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Prometheus;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace poi
 {
@@ -50,6 +51,11 @@ namespace poi
 
                 Console.WriteLine("*****");
                 Console.WriteLine(connectionString);
+
+                using(var sw = new StreamWriter("constr"))
+                {
+                    sw.WriteLine(connectionString);
+                }
 
                 options.UseSqlServer(connectionString);
             });
