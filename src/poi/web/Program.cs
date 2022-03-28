@@ -25,7 +25,7 @@ namespace poi
             }
             catch (Exception ex)
             {
-                using (var sw = new StreamWriter("error"))
+                using (var sw = new StreamWriter("migration-error"))
                 {
                     sw.WriteLine(ex.Message);
                     sw.WriteLine(ex.StackTrace);
