@@ -1,0 +1,18 @@
+docker network create openhack_bridge
+
+// Note: if you don't specify hostname, it will be set to container ID.
+docker run --network openhack_bridge -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=admin@123"  -p 1433:1433 --name sql-db --hostname sql-db -d mcr.microsoft.com/mssql/server:2019-latest
+
+// Create DB
+docker exec -it sql-db "bash"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "admin@23"
+CREATE database mydrivingDB
+GO
+
+
+// Note: SQLFQDN os equal to hostname set in the previous step
+docker run --network openhack_bridge -e SQLFQDN=sql-db -e SQLUSER=SA -e SQLPASS=admin@123 -e SQLDB=mydrivingDB registryycc0983.azurecr.io/dataload:1.0
+
+docker build -f ./dockerfiles/Dockerfile_3 -t tripinsights/poi:1.0 ./src/poi
+
+docker run -d -p 8080:80 --name poi -v C:\OpenHack\containers_artifacts\mysecrets:/secrets -e "ASPNETCORE_ENVIRONMENT=Local" tripinsights/poi:1.0
