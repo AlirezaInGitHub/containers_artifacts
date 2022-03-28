@@ -5,7 +5,7 @@ docker run --network openhack_bridge -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=admin@12
 
 // Create DB
 docker exec -it sql-db "bash"
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "admin@23"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "admin@123"
 CREATE database mydrivingDB
 GO
 
