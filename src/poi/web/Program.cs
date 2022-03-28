@@ -17,21 +17,7 @@ namespace poi
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-            try
-            {
-                var c = host.Services.GetService<POIContext>();
-                c.Database.Migrate();
-            }
-            catch (Exception ex)
-            {
-                using (var sw = new StreamWriter("migration-error"))
-                {
-                    sw.WriteLine(ex.Message);
-                    sw.WriteLine(ex.StackTrace);
-                }
-            }
-            host.Run();
+            BuildWebHost(args).Run();
         }
 
         public static IWebHost BuildWebHost(string[] args)
