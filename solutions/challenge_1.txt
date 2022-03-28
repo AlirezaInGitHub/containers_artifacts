@@ -14,5 +14,13 @@ GO
 docker run --network openhack_bridge -e SQLFQDN=sql-db -e SQLUSER=SA -e SQLPASS=admin@123 -e SQLDB=mydrivingDB registryycc0983.azurecr.io/dataload:1.0
 
 docker build -f ./dockerfiles/Dockerfile_3 -t tripinsights/poi:1.0 ./src/poi
+docker build -f ./dockerfiles/Dockerfile_4 -t tripinsights/tripviewer:1.0 ./src/trips
+docker build -f ./dockerfiles/Dockerfile_0 -t tripinsights/tripviewer:1.0 ./src/user-java
+docker build -f ./dockerfiles/Dockerfile_1 -t tripinsights/tripviewer:1.0 .\src\tripviewer\
+docker build -f ./dockerfiles/Dockerfile_2 -t tripinsights/tripviewer:1.0 .\src\userprofile\
 
-docker run -d -p 8080:80 --name poi -v C:\OpenHack\containers_artifacts\mysecrets:/secrets -e "ASPNETCORE_ENVIRONMENT=Local" tripinsights/poi:1.0
+docker run -d -p 8080:80 --name poi         -v C:\OpenHack\containers_artifacts\mysecrets:/secrets -e "ASPNETCORE_ENVIRONMENT=Local" tripinsights/poi:1.0
+docker run -d -p 9090:80 --name trip        -v C:\OpenHack\containers_artifacts\mysecrets:/secrets  tripinsights/trips:1.0
+docker run -d -p 7070:80 --name user-java   -v C:\OpenHack\containers_artifacts\mysecrets:/secrets  tripinsights/user-java:1.0
+docker run -d -p 6060:80 --name tripviewer  -v C:\OpenHack\containers_artifacts\mysecrets:/secrets  tripinsights/tripviewer:1.0
+
